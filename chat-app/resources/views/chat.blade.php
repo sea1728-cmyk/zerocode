@@ -18,6 +18,23 @@
                 </div>
             @endforeach
         </div>
+
+        <form action="/chat" method="post" class="bg-white p-3 border-t border-gray-200">
+            @csrf
+            <div class="mb-2">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="名前を入力" class="w-full border border-gray-300 rounded-full px-4 py-2">
+                @error('name')
+                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="flex gap-2">
+                <input type="text" name="body" value="{{ old('body') }}" placeholder="メッセージを入力" class="flex-1 border border-gray-300 rounded-full px-4 py-2">
+                <button type="submit" class="bg-green-600 text-white font-bold rounded-full px-4 py-2">送信</button>
+            </div>
+            @error('body')
+                <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
+            @enderror
+        </form>
     </div>
 </body>
 </html>
