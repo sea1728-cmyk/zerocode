@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Message;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -7,14 +8,8 @@ Route::get('/', function () {
 });
 
 Route::get('/chat', function () {
-    // 画面に出す会話（名前と本文の組を、上から順に並べる）
-    $messages = [
-        ['name' => 'はな', 'body' => 'こんにちは。このチャット、自分で作ったんだって？'],
-        ['name' => 'そら', 'body' => 'そう。Laravel という道具で作ったよ'],
-        ['name' => 'はな', 'body' => 'すごい、ほんとに動いてる'],
-        ['name' => 'そら', 'body' => 'まだ見た目だけだけどね'],
-        ['name' => 'はな', 'body' => 'じゃあ記念にひとこと。はじめまして'],
-    ];
+    // 画面に出す会話（メッセージの表から、入れた順に並べる）
+    $messages = Message::orderBy('id')->get();
 
     return view('chat', ['messages' => $messages]);
 });
