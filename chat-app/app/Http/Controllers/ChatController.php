@@ -34,4 +34,35 @@ class ChatController extends Controller
 
         return redirect('/chat');
     }
+
+    public function destroy(Message $message)
+    {
+        // 押された吹き出しのメッセージを消す
+        $message->delete();
+
+        return redirect('/chat');
+    }
+
+    public function edit(Message $message)
+    {
+        // 押された吹き出しのメッセージを、書き直す画面に出す
+        return view('edit', ['message' => $message]);
+    }
+
+    public function update(Request $request, Message $message)
+    {
+        // 書き直した本文をチェックする（空なら書き直す画面に戻ってお知らせを出す）
+        $validated = $request->validate([
+            'body' => 'required',
+        ], [
+            'body.required' => 'メッセージを入力してください',
+        ]);
+
+        // 書き直した本文で保存する
+        $message->update([
+            'body' => $validated['body'],
+        ]);
+
+        return redirect('/chat');
+    }
 }

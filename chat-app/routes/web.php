@@ -16,3 +16,9 @@ Route::get('/chat', function () {
 });
 
 Route::post('/chat', [ChatController::class, 'store']);
+
+Route::delete('/chat/{message}', [ChatController::class, 'destroy']);
+
+Route::get('/chat/{message}/edit', [ChatController::class, 'edit']);
+
+Route::put('/chat/{message}', [ChatController::class, 'update']);

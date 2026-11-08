@@ -15,6 +15,12 @@
                 <div>
                     <p class="text-xs text-gray-500 mb-1">{{ $message['name'] }}</p>
                     <p class="inline-block bg-white rounded-2xl px-4 py-2 shadow-sm">{{ $message['body'] }}</p>
+                    <p class="mt-1"><a href="/chat/{{ $message['id'] }}/edit" class="text-xs text-blue-600">編集</a></p>
+                    <form action="/chat/{{ $message['id'] }}" method="post" class="mt-1">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-xs text-red-600">削除</button>
+                    </form>
                 </div>
             @endforeach
         </div>
