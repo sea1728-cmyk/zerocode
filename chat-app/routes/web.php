@@ -1,24 +1,21 @@
 <?php
 
 use App\Http\Controllers\ChatController;
-use App\Models\Message;
+use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/chat', function () {
-    // 画面に出す会話（メッセージの表から、入れた順に並べる）
-    $messages = Message::orderBy('id')->get();
+Route::get('/rooms', [RoomController::class, 'index']);
 
-    return view('chat', ['messages' => $messages]);
-});
+Route::get('/rooms/{room}', [RoomController::class, 'show']);
 
-Route::post('/chat', [ChatController::class, 'store']);
+Route::post('/rooms/{room}', [ChatController::class, 'store']);
 
-Route::delete('/chat/{message}', [ChatController::class, 'destroy']);
+Route::delete('/messages/{message}', [ChatController::class, 'destroy']);
 
-Route::get('/chat/{message}/edit', [ChatController::class, 'edit']);
+Route::get('/messages/{message}/edit', [ChatController::class, 'edit']);
 
-Route::put('/chat/{message}', [ChatController::class, 'update']);
+Route::put('/messages/{message}', [ChatController::class, 'update']);

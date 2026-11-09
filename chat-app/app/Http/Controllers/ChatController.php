@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Room;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -15,7 +16,7 @@ class ChatController extends Controller
         return view('chat', ['name' => $name]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Room $room)
     {
         // 送られた名前と本文をチェックする（空なら画面に戻ってお知らせを出す）
         $validated = $request->validate([
@@ -26,13 +27,14 @@ class ChatController extends Controller
             'body.required' => 'メッセージを入力してください',
         ]);
 
-        // 入力された名前で保存する
+        // 入力された名前で、このルームあてに保存する
         Message::create([
             'name' => $validated['name'],
             'body' => $validated['body'],
+            'room_id' => $room->id,
         ]);
 
-        return redirect('/chat');
+        return redirect('/rooms/' . $room->id);
     }
 
     public function destroy(Message $message)
@@ -40,7 +42,7 @@ class ChatController extends Controller
         // 押された吹き出しのメッセージを消す
         $message->delete();
 
-        return redirect('/chat');
+        return redirect('/rooms/' . $message->room_id);
     }
 
     public function edit(Message $message)
@@ -63,6 +65,6 @@ class ChatController extends Controller
             'body' => $validated['body'],
         ]);
 
-        return redirect('/chat');
+        return redirect('/rooms/' . $message->room_id);
     }
 }

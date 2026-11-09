@@ -8,9 +8,12 @@
 </head>
 <body class="bg-gray-300">
     <div class="max-w-sm mx-auto min-h-screen flex flex-col bg-gray-100">
-        <h1 class="bg-green-600 text-white text-lg font-bold text-center py-3">メッセージの編集</h1>
+        <h1 class="relative bg-green-600 text-white text-lg font-bold text-center py-3">
+            <a href="/rooms/{{ $message['room_id'] }}" class="absolute left-3 text-sm font-normal">‹ 戻る</a>
+            メッセージの編集
+        </h1>
 
-        <form action="/chat/{{ $message['id'] }}" method="post" class="p-4">
+        <form action="/messages/{{ $message['id'] }}" method="post" class="p-4">
             @csrf
             @method('PUT')
             <div class="flex gap-2">
