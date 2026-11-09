@@ -16,15 +16,30 @@
 
         <div class="flex-1 p-4 space-y-4">
             @foreach ($messages as $message)
-                <div>
+                {{-- 自分（今のニックネームと同じ名前）なら右に緑、他の人なら左に白 --}}
+                @php($isMine = $message['name'] === session('nickname'))
+                <div class="{{ $isMine ? 'text-right' : 'text-left' }}">
                     <p class="text-xs text-gray-500 mb-1">{{ $message['name'] }}</p>
-                    <p class="inline-block bg-white rounded-2xl px-4 py-2 shadow-sm">{{ $message['body'] }}</p>
-                    <p class="mt-1"><a href="/messages/{{ $message['id'] }}/edit" class="text-xs text-blue-600">編集</a></p>
-                    <form action="/messages/{{ $message['id'] }}" method="post" class="mt-1">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-xs text-red-600">削除</button>
-                    </form>
+                    {{-- 送った時刻（保存は世界の標準時なので、日本の時刻に直して 14:05 の形で出す） --}}
+                    @php($time = $message->created_at?->timezone('Asia/Tokyo')->format('H:i'))
+                    <div class="flex items-end gap-1 {{ $isMine ? 'justify-end' : 'justify-start' }}">
+                        @if ($isMine)
+                            <span class="text-xs text-gray-500">{{ $time }}</span>
+                        @endif
+                        <p class="inline-block rounded-2xl px-4 py-2 shadow-sm {{ $isMine ? 'bg-green-500 text-white' : 'bg-white' }}">{{ $message['body'] }}</p>
+                        @if (! $isMine)
+                            <span class="text-xs text-gray-500">{{ $time }}</span>
+                        @endif
+                    </div>
+                    {{-- 編集と削除は、自分のメッセージにだけ出す --}}
+                    @if ($isMine)
+                        <p class="mt-1"><a href="/messages/{{ $message['id'] }}/edit" class="text-xs text-blue-600">編集</a></p>
+                        <form action="/messages/{{ $message['id'] }}" method="post" class="mt-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-xs text-red-600">削除</button>
+                        </form>
+                    @endif
                 </div>
             @endforeach
         </div>

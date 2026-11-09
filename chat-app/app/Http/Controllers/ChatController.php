@@ -40,22 +40,37 @@ class ChatController extends Controller
         return redirect('/rooms/' . $room->id);
     }
 
-    public function destroy(Message $message)
+    public function destroy(Request $request, Message $message)
     {
+        // 自分のメッセージでなければ、消さずにルームへ戻す
+        if ($message->name !== $request->session()->get('nickname')) {
+            return redirect('/rooms/' . $message->room_id);
+        }
+
         // 押された吹き出しのメッセージを消す
         $message->delete();
 
         return redirect('/rooms/' . $message->room_id);
     }
 
-    public function edit(Message $message)
+    public function edit(Request $request, Message $message)
     {
+        // 自分のメッセージでなければ、書き直す画面を出さずにルームへ戻す
+        if ($message->name !== $request->session()->get('nickname')) {
+            return redirect('/rooms/' . $message->room_id);
+        }
+
         // 押された吹き出しのメッセージを、書き直す画面に出す
         return view('edit', ['message' => $message]);
     }
 
     public function update(Request $request, Message $message)
     {
+        // 自分のメッセージでなければ、保存せずにルームへ戻す
+        if ($message->name !== $request->session()->get('nickname')) {
+            return redirect('/rooms/' . $message->room_id);
+        }
+
         // 書き直した本文をチェックする（空なら書き直す画面に戻ってお知らせを出す）
         $validated = $request->validate([
             'body' => 'required',
