@@ -1,12 +1,17 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\EnterController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/enter', [EnterController::class, 'create']);
+
+Route::post('/enter', [EnterController::class, 'store']);
 
 Route::get('/rooms', [RoomController::class, 'index']);
 

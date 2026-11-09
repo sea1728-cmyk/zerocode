@@ -18,18 +18,21 @@ class ChatController extends Controller
 
     public function store(Request $request, Room $room)
     {
-        // 送られた名前と本文をチェックする（空なら画面に戻ってお知らせを出す）
+        // 入室していなければ、入室の画面へ戻す
+        if (! $request->session()->has('nickname')) {
+            return redirect('/enter');
+        }
+
+        // 送られた本文をチェックする（空なら画面に戻ってお知らせを出す）
         $validated = $request->validate([
-            'name' => 'required',
             'body' => 'required',
         ], [
-            'name.required' => '名前を入力してください',
             'body.required' => 'メッセージを入力してください',
         ]);
 
-        // 入力された名前で、このルームあてに保存する
+        // 入室したときの名前で、このルームあてに保存する
         Message::create([
-            'name' => $validated['name'],
+            'name' => $request->session()->get('nickname'),
             'body' => $validated['body'],
             'room_id' => $room->id,
         ]);

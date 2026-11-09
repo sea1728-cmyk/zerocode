@@ -8,7 +8,10 @@
 </head>
 <body class="bg-gray-300">
     <div class="max-w-sm mx-auto min-h-screen flex flex-col bg-gray-100">
-        <h1 class="bg-green-600 text-white text-lg font-bold text-center py-3">ルーム一覧</h1>
+        <h1 class="relative bg-green-600 text-white text-lg font-bold text-center py-3">
+            ルーム一覧
+            <span class="absolute right-3 text-sm font-normal">{{ session('nickname') }}</span>
+        </h1>
 
         <ul class="flex-1 p-4 space-y-3">
             @foreach ($rooms as $room)

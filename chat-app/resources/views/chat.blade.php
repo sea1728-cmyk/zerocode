@@ -11,6 +11,7 @@
         <h1 class="relative bg-green-600 text-white text-lg font-bold text-center py-3">
             <a href="/rooms" class="absolute left-3 text-sm font-normal">‹ 一覧</a>
             {{ $room['name'] }}
+            <span class="absolute right-3 text-sm font-normal">{{ session('nickname') }}</span>
         </h1>
 
         <div class="flex-1 p-4 space-y-4">
@@ -30,12 +31,6 @@
 
         <form action="/rooms/{{ $room['id'] }}" method="post" class="bg-white p-3 border-t border-gray-200">
             @csrf
-            <div class="mb-2">
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="名前を入力" class="w-full border border-gray-300 rounded-full px-4 py-2">
-                @error('name')
-                    <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
             <div class="flex gap-2">
                 <input type="text" name="body" value="{{ old('body') }}" placeholder="メッセージを入力" class="flex-1 border border-gray-300 rounded-full px-4 py-2">
                 <button type="submit" class="bg-green-600 text-white font-bold rounded-full px-4 py-2">送信</button>
